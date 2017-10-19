@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.livingroom.autoservice">
+
+    <!-- Add permissioin to allow this app receive boot_complted event-->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+   <!--  Add permission for monitoring the battery status -->
+    <uses-permission android:name="android.permission.BATTERY_STATS"/>
+
+    <application
+        android:allowBackup="true"
+        android:supportsRtl="true">
+        // make the activity transparent, so user won't even notice
+        <activity android:name=".MainActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <!-- this is needed to hide the icon-->
+                <data android:host="MainActivity" android:scheme="com.example.livingroom.autoservice" />
+            </intent-filter>
+        </activity>
+
+        <!-- broadcast receiver for receiving the boot completed broadcast -->
+        <receiver android:name=".Receiver" android:enabled="true" android:exported="true">
+            <intent-filter>
+                <!-- make my broadcast receiver receive the BOOT_COMPLETED event-->
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <!-- i want to only start the service when battery is ok-->
+                <action android:name="android.intent.action.ACTION_BATTERY_LOW"/>
+                <action android:name="android.intent.action.ACTION_BATTERY_OKAY"/>
+            </intent-filter>
+        </receiver>
+        
+        <service
+            android:name=".MyService"
+            android:enabled="true"
+            android:exported="true">
+        </service>
+    </application>
+
+</manifest>
